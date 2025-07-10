@@ -79,6 +79,7 @@ class MetricsResponse(BaseModel):
 # --- MOCK DATA GENERATOR ---
 
 import random
+from datetime import timedelta
 
 def _generate_mock_metrics(n=60):
     projects = ["ImageGen", "SalesCRM", "AI Chatbot", "DashboardPro", "VideoMaker", "SiteBuilder"]
@@ -89,7 +90,8 @@ def _generate_mock_metrics(n=60):
     now = datetime.utcnow()
     for i in range(n):
         duration = round(random.uniform(8, 180), 2)
-        created = now.replace(microsecond=0) - random.timedelta(days=random.randint(0, 30), hours=random.randint(0,23), minutes=random.randint(0,59))
+        # Correctly use datetime.timedelta for offset, not random.timedelta
+        created = now.replace(microsecond=0) - timedelta(days=random.randint(0, 30), hours=random.randint(0,23), minutes=random.randint(0,59))
         status = random.choices(["SUCCESS", "FAILED", "RUNNING"], [0.7, 0.2, 0.1])[0]
         completed = None
         if status != "RUNNING":
@@ -111,12 +113,6 @@ def _generate_mock_metrics(n=60):
 
 # Use a fixed seed so mock data is deterministic per run
 random.seed(42)
-try:
-    # If random.datetime is not available, fallback using timedelta import
-    from datetime import timedelta
-    random.timedelta = timedelta
-except ImportError:
-    pass
 
 # Generate global mock data
 MOCK_METRICS = [MetricEntry(**m) for m in _generate_mock_metrics()]
