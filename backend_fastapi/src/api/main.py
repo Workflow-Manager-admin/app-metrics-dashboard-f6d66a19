@@ -1,6 +1,5 @@
 from fastapi import FastAPI, Query
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
 from typing import Optional, List, Literal
 from pydantic import BaseModel, Field
 from datetime import datetime
@@ -221,4 +220,5 @@ def get_metrics(
         page_size=page_size,
         total_pages=total_pages
     )
-    return JSONResponse(content=resp.model_dump())
+    # Return as a Pydantic model so FastAPI handles JSON serialization (including datetime)
+    return resp
