@@ -1,0 +1,4 @@
+{
+    "command": "pytest",
+    "working_directory": "/home/kavia/workspace/code-generation/app-metrics-dashboard-f6d66a19/backend_fastapi"
+}
